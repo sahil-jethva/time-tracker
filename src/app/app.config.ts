@@ -5,7 +5,10 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import { MyPreset } from '../assests/theme/mytheme';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { customInterceptor } from './interceptor/custom.interceptor';
+import { AuthGuardService } from './Services/auth-guard.service';
+import { ProtectedAuthGuardService } from './Services/protected-auth-guard.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
@@ -17,6 +20,9 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: MyPreset,
       }
-    })
+    }),
+    provideHttpClient(withInterceptors([customInterceptor])),
+    AuthGuardService,
+    ProtectedAuthGuardService
   ]
 };

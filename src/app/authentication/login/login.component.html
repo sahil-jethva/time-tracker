@@ -1,0 +1,38 @@
+<div class="grid">
+  <div class="sm:col-12 col-12">
+    <div class="flex">
+      <div class="sm:col-6 col-12">
+        <img src="images/login.jpg" alt="login">
+      </div>
+      <div class="sm:col-6 col-12">
+        <div class="title">
+          <h1 class="fw-semibold">
+            Login to Time-tracker
+          </h1>
+        </div>
+        <div class="sm:col-12 col-6">
+          <label for="on_label-email">Email</label>
+        </div>
+        <div class="sm:col-6 col-6">
+          <input pInputText type="text" [(ngModel)]="email" class="w-full" size="large"
+            placeholder="example@gmail.com" />
+        </div>
+        <div class="sm:col-12 col-6">
+          <label for="on_label-password">Password</label>
+        </div>
+        <div class="sm:col-6 col-3">
+          <p-password [(ngModel)]="password" class="w-full" [feedback]="false" size="large" [toggleMask]="true" />
+        </div>
+        <div class="sm:col-6 col-3">
+          <p-toast />
+          <p-button label="Login" class="w-full" pRipple (click)="login()" icon="pi pi-sign-in" />
+        </div>
+        <div class="sm:col-6 col-3">
+          <p>
+            Don't have an account. <a routerLink="/Register">Register here!!</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

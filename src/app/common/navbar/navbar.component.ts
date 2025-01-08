@@ -5,9 +5,10 @@ import { MegaMenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { MegaMenu } from 'primeng/megamenu';
+import { Tooltip } from 'primeng/tooltip';
 @Component({
   selector: 'app-navbar',
-  imports: [ButtonModule, MegaMenu, CommonModule, AvatarModule,RouterLink],
+  imports: [ButtonModule, MegaMenu, CommonModule, AvatarModule, Tooltip,RouterLink],
   standalone: true,
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'

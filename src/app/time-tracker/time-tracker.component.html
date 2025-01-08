@@ -3,9 +3,9 @@
   <div class="p-card-content">
     <p-button (click)="showDialog()" label="Start timer" />
     <p-dialog header="Edit Profile" [modal]="true" [resizable]="true" [(visible)]="visible"  [style]="{ width: '25rem' }">
-      <!-- <span class="p-text-secondary block mb-4">Update your information.</span> -->
       <div class="flex items-center gap-4 mb-4">
-            <p-multiselect [options]="cities" [(ngModel)]="selectedCities" appendTo="body" optionLabel="name" placeholder="Select Cities" styleClass="w-full md:w-100" />
+            <p-multiselect [options]="cities" [(ngModel)]="selectedCities" appendTo="body"
+             optionLabel="c_name" [group]=""  placeholder="Select Cities" styleClass="w-full md:w-100" />
       </div>
       <div class="flex items-center gap-4 mb-4">
         <p-floatlabel variant="on">
