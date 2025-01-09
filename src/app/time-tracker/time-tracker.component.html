@@ -1,22 +1,104 @@
 <app-navbar />
 <p-card class="p-card-body">
   <div class="p-card-content">
-    <p-button (click)="showDialog()" label="Start timer" />
-    <p-dialog header="Edit Profile" [modal]="true" [resizable]="true" [(visible)]="visible"  [style]="{ width: '25rem' }">
-      <div class="flex items-center gap-4 mb-4">
-            <p-multiselect [options]="cities" [(ngModel)]="selectedCities" appendTo="body"
-             optionLabel="c_name" [group]=""  placeholder="Select Cities" styleClass="w-full md:w-100" />
+    <div class="grid">
+      <div class="col-3">
+          <p-datepicker [(ngModel)]="dates" [maxDate]="maxDate"  appendTo="body" />
       </div>
-      <div class="flex items-center gap-4 mb-4">
-        <p-floatlabel variant="on">
-          <label for="on_label-email">Email</label>
-          <input pInputText id="on_label-email" />
-        </p-floatlabel>
+      <div class="col-3">
+        <p-select [options]="clients" [fluid]="true" [checkmark]="true" [(ngModel)]="selectedClients" appendTo="body"
+          optionLabel="c_name" (onChange)="getProjects($event)" placeholder="Select Clients"
+          styleClass="w-full md:w-100" />
       </div>
-      <div class="flex justify-content-end  gap-2">
-        <p-button label="Cancel" severity="secondary" (click)="visible = false" />
-        <p-button label="Save" (click)="visible = false" />
+      @if (projects.length !== 0) {
+      <div class="col-3">
+        <p-select [options]="projects" [fluid]="true" [checkmark]="true" [(ngModel)]="selectedprojects" appendTo="body"
+          optionLabel="p_name" (onChange)="getTasks($event)" placeholder="Select Projects"
+          styleClass="w-full md:w-100" />
       </div>
-    </p-dialog>
+      }
+    </div>
+    <p-table [value]="taskss" stripedRows showGridlines dataKey="id">
+      <ng-template #header>
+        <tr style="text-align: center;">
+          <th width="20%">
+            tasks
+          </th>
+          <th width="20%">
+            Start Time
+          </th>
+          <th width="20%">
+            End Time
+          </th>
+          <th width="20%">
+            Time
+          </th>
+          <th width="20%">
+            Description
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-product let-editing="editing">
+        <tr>
+          <td [pEditableColumn]="selectedtasks" pEditableColumnField="tasks">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-select [options]="tasks" [checkmark]="true" [(ngModel)]="selectedtasks" appendTo="body"
+                  optionLabel="t_name" (onChange)="getTaskName($event)" placeholder="Select tasks" />
+              </ng-template>
+              <ng-template #output>
+                {{selectedtasks}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td [pEditableColumn]="product.name" pEditableColumnField="Start-time">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-datepicker [(ngModel)]="startTime" appendTo="body" [timeOnly]="true" [showSeconds]="true"
+                  [hourFormat]="'24'" (onBlur)="updateTotalTime()" [showTime]="true" />
+              </ng-template>
+              <ng-template #output>
+                {{startTime | date:'HH:mm:ss'}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td [pEditableColumn]="product.inventoryStatus" pEditableColumnField="end-time">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-datepicker [(ngModel)]="endTime" appendTo="body" [timeOnly]="true" [showSeconds]="true"
+                  [hourFormat]="'24'" (onBlur)="updateTotalTime()" [showTime]="true" />
+              </ng-template>
+              <ng-template #output>
+                {{endTime | date:'HH:mm:ss'}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td [pEditableColumn]="product.inventoryStatus" pEditableColumnField="Time">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-inputgroup>
+                  <input pInputText [(ngModel)]="totalTime" [disabled]="true" />
+                  <p-inputgroup-addon>hrs</p-inputgroup-addon>
+                </p-inputgroup>
+              </ng-template>
+              <ng-template #output>
+                {{totalTime}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td [pEditableColumn]="product.inventoryStatus" pEditableColumnField="description">
+            <p-cellEditor>
+              <ng-template #input>
+                <input pInputText [(ngModel)]="description" />
+              </ng-template>
+              <ng-template #output>
+                {{description}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-button (click)="logs()" label="add" icon="pi pi-plus"/>
   </div>
 </p-card>

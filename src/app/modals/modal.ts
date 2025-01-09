@@ -10,3 +10,18 @@ export interface Login{
   password: string
   id: number
 }
+
+export interface Projects{
+  p_name: string
+  id: number
+}
+export interface Tasks {
+  t_name: string
+  id: number
+}
+export interface UserLoginDetail {
+  id: number
+  email: string
+  password: number
+  name: string
+}

@@ -4,7 +4,7 @@
       <div class="sm:col-6 col-12">
         <img src="images/login.jpg" alt="login">
       </div>
-      <div class="sm:col-6 col-12">
+      <div class="sm:col-6 col-12 p-8">
         <div class="title">
           <h1 class="fw-semibold">
             Login to Time-tracker
@@ -20,12 +20,12 @@
         <div class="sm:col-12 col-6">
           <label for="on_label-password">Password</label>
         </div>
-        <div class="sm:col-6 col-3">
-          <p-password [(ngModel)]="password" class="w-full" [feedback]="false" size="large" [toggleMask]="true" />
+        <div class="sm:col-6 col-6">
+          <p-password [(ngModel)]="password"  class="w-full" [fluid]="true" placeholder="password" [feedback]="false" size="large" [toggleMask]="true" />
         </div>
         <div class="sm:col-6 col-3">
           <p-toast />
-          <p-button label="Login" class="w-full" pRipple (click)="login()" icon="pi pi-sign-in" />
+          <p-button label="Login" class="w-full" [fluid]="true" pRipple (click)="login()" icon="pi pi-sign-in" />
         </div>
         <div class="sm:col-6 col-3">
           <p>

@@ -4,7 +4,7 @@
       <div class="sm:col-6 col-12 p-6">
         <img src="images/register.png" alt="register">
       </div>
-      <div class="sm:col-6 col-12">
+      <div class="sm:col-6 col-12 p-8">
         <div class="title">
           <h1 class="fw-semibold">
             Register to Time-tracker
@@ -20,17 +20,19 @@
           <label for="on_label-email">Email</label>
         </div>
         <div class="sm:col-6 col-6">
-          <input pInputText type="text" [(ngModel)]="email" class="w-full" size="large" placeholder="example@gmail.com" />
+          <input pInputText type="text" [(ngModel)]="email" class="w-full" size="large"
+            placeholder="example@gmail.com" />
         </div>
         <div class="sm:col-12 col-6">
           <label for="on_label-password">Password</label>
         </div>
-        <div class="sm:col-6 col-3">
-          <p-password [(ngModel)]="password" class="w-full" [feedback]="false" size="large" [toggleMask]="true" />
+        <div class="sm:col-6 col-6">
+          <p-password [(ngModel)]="password" class="w-full" [fluid]="true" placeholder="password" [feedback]="false"
+            size="large" [toggleMask]="true" />
         </div>
         <div class="sm:col-6 col-3">
           <p-toast />
-          <p-button label="Register" pRipple  (click)="register()" icon="pi pi-user-plus"/>
+          <p-button label="Register" pRipple [fluid]="true" (click)="register()" icon="pi pi-user-plus" />
         </div>
         <div class="sm:col-6 col-3">
           <p>
