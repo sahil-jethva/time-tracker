@@ -2,15 +2,16 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MegaMenuItem } from 'primeng/api';
-import { AvatarModule } from 'primeng/avatar';
-import { ButtonModule } from 'primeng/button';
-import { MegaMenu } from 'primeng/megamenu';
-import { Tooltip } from 'primeng/tooltip';
 import { UserLoginDetail } from '../../modals/modal';
 import { HttpClient } from '@angular/common/http';
+import { SharedModule } from '../../shared/shared.module';
 @Component({
   selector: 'app-navbar',
-  imports: [ButtonModule, MegaMenu, CommonModule, AvatarModule, Tooltip,RouterLink],
+  imports: [
+    SharedModule,
+    CommonModule,
+    RouterLink
+  ],
   standalone: true,
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'

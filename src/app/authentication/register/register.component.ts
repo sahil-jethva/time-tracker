@@ -3,26 +3,14 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { InputMaskModule } from 'primeng/inputmask';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { Ripple } from 'primeng/ripple';
-import { Toast } from 'primeng/toast';
+import { SharedModule } from '../../shared/shared.module';
 
 @Component({
   selector: 'app-register',
   imports: [
-    CardModule,
-    InputTextModule,
-    ButtonModule,
-    PasswordModule,
+    SharedModule,
+    RouterLink,
     FormsModule,
-    InputMaskModule,
-    Toast,
-    Ripple,
-    RouterLink
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',

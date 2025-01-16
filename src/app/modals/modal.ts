@@ -25,3 +25,18 @@ export interface UserLoginDetail {
   password: number
   name: string
 }
+export interface Logs{
+  u_id: number
+  date: string
+  c_name: string
+  p_name: string
+  tasks: Task[]
+}
+
+export interface Task{
+  t_name: string
+  start_time: number | Date | null
+  end_time: number  | Date | null;
+  description: string
+  totalTime?: number | string | undefined
+}

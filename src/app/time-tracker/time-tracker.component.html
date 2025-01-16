@@ -1,9 +1,17 @@
 <app-navbar />
 <p-card class="p-card-body">
   <div class="p-card-content">
-    <div class="grid">
+    <div class="mb-4 mt-4" style="position: relative; width: 100%;">
+      <p>9 Hours : Cumulative hours spent(approx.)</p>
+      <p-progressBar [showValue]="false" [value]="sharedProgress">
+      </p-progressBar>
+      <span
+        style="position: absolute; top: 75%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; text-align: center;">
+        {{ formatTime(totalElapsedTime) }}</span>
+    </div>
+    <div class="grid mb-3">
       <div class="col-3">
-          <p-datepicker [(ngModel)]="dates" [maxDate]="maxDate"  appendTo="body" />
+        <p-datepicker [(ngModel)]="dates" [maxDate]="maxDate" appendTo="body" />
       </div>
       <div class="col-3">
         <p-select [options]="clients" [fluid]="true" [checkmark]="true" [(ngModel)]="selectedClients" appendTo="body"
@@ -18,87 +26,84 @@
       </div>
       }
     </div>
-    <p-table [value]="taskss" stripedRows showGridlines dataKey="id">
+    <p-table [value]="taskss" showGridlines dataKey="id">
       <ng-template #header>
-        <tr style="text-align: center;">
-          <th width="20%">
+        <tr>
+          <th width="16%" style="text-align: center;">
+            Clone
+          </th>
+          <th width="16%" style="text-align: center;">
             tasks
           </th>
-          <th width="20%">
+          <th width="16%" style="text-align: center;">
             Start Time
           </th>
-          <th width="20%">
+          <th width="16%" style="text-align: center;">
             End Time
           </th>
-          <th width="20%">
-            Time
+          <th width="16%" style="text-align: center;">
+            Total Time
           </th>
-          <th width="20%">
+          <th width="16%" style="text-align: center;">
             Description
           </th>
         </tr>
       </ng-template>
-      <ng-template #body let-product let-editing="editing">
+      <ng-template #body let-data let-editing="editing">
         <tr>
-          <td [pEditableColumn]="selectedtasks" pEditableColumnField="tasks">
+          <td style="text-align: center;">
+            <p-toast />
+            <p-button (click)="cloneData(data)" label="clone" icon="pi pi-clone" [disabled]="disableClone" />
+          </td>
+          <td style="text-align: center;" [pEditableColumn]="data.t_name" pEditableColumnField="t_name">
             <p-cellEditor>
               <ng-template #input>
-                <p-select [options]="tasks" [checkmark]="true" [(ngModel)]="selectedtasks" appendTo="body"
+                <p-select [options]="tasks" [checkmark]="true" [(ngModel)]="data.t_name" appendTo="body"
                   optionLabel="t_name" (onChange)="getTaskName($event)" placeholder="Select tasks" />
               </ng-template>
+            </p-cellEditor>
+            {{data?.taskss?.t_name}}
+          </td>
+          <td style="text-align: center;" [pEditableColumn]="data.start_time" pEditableColumnField="start_time">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-datepicker [(ngModel)]="data.start_time" appendTo="body" [timeOnly]="true" [showSeconds]="true"
+                  [hourFormat]="'24'" (ngModelChange)="calculateTotalTime(data)" [showTime]="true" />
+              </ng-template>
               <ng-template #output>
-                {{selectedtasks}}
+                {{data.start_time | date:'HH:mm:ss'}}
               </ng-template>
             </p-cellEditor>
           </td>
-          <td [pEditableColumn]="product.name" pEditableColumnField="Start-time">
+          <td style="text-align: center;" [pEditableColumn]="data.end_time" pEditableColumnField="end_time">
             <p-cellEditor>
               <ng-template #input>
-                <p-datepicker [(ngModel)]="startTime" appendTo="body" [timeOnly]="true" [showSeconds]="true"
-                  [hourFormat]="'24'" (onBlur)="updateTotalTime()" [showTime]="true" />
+                <p-datepicker [(ngModel)]="data.end_time" appendTo="body" [timeOnly]="true" [showSeconds]="true"
+                  [hourFormat]="'24'" (ngModelChange)="calculateTotalTime(data)" [showTime]="true" />
               </ng-template>
               <ng-template #output>
-                {{startTime | date:'HH:mm:ss'}}
+                {{data.end_time | date:'HH:mm:ss'}}
               </ng-template>
             </p-cellEditor>
           </td>
-          <td [pEditableColumn]="product.inventoryStatus" pEditableColumnField="end-time">
-            <p-cellEditor>
-              <ng-template #input>
-                <p-datepicker [(ngModel)]="endTime" appendTo="body" [timeOnly]="true" [showSeconds]="true"
-                  [hourFormat]="'24'" (onBlur)="updateTotalTime()" [showTime]="true" />
-              </ng-template>
-              <ng-template #output>
-                {{endTime | date:'HH:mm:ss'}}
-              </ng-template>
-            </p-cellEditor>
+          <td style="text-align: center;">
+            {{data.totalTime}}
           </td>
-          <td [pEditableColumn]="product.inventoryStatus" pEditableColumnField="Time">
+          <td style="text-align: center;" [pEditableColumn]="data.description" pEditableColumnField="description">
             <p-cellEditor>
               <ng-template #input>
-                <p-inputgroup>
-                  <input pInputText [(ngModel)]="totalTime" [disabled]="true" />
-                  <p-inputgroup-addon>hrs</p-inputgroup-addon>
-                </p-inputgroup>
+                <input pInputText [(ngModel)]="data.description" />
               </ng-template>
               <ng-template #output>
-                {{totalTime}}
-              </ng-template>
-            </p-cellEditor>
-          </td>
-          <td [pEditableColumn]="product.inventoryStatus" pEditableColumnField="description">
-            <p-cellEditor>
-              <ng-template #input>
-                <input pInputText [(ngModel)]="description" />
-              </ng-template>
-              <ng-template #output>
-                {{description}}
+                {{data.description}}
               </ng-template>
             </p-cellEditor>
           </td>
         </tr>
       </ng-template>
     </p-table>
-    <p-button (click)="logs()" label="add" icon="pi pi-plus"/>
+  </div>
+  <div class="mt-3" style="justify-content: end; display: flex;">
+    <p-button (click)="logs()" label="add" icon="pi pi-plus" />
   </div>
 </p-card>

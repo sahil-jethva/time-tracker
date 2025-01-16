@@ -1,68 +1,43 @@
-import { Component, OnInit } from '@angular/core';
-import { NavbarComponent } from '../common/navbar/navbar.component';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { DefaultService } from '../Services/defaultGets.service';
-import { Select, SelectChangeEvent } from 'primeng/select';
+import { SelectChangeEvent } from 'primeng/select';
 import { HttpClient } from '@angular/common/http';
 import { Projects, Tasks } from '../modals/modal';
-import { CommonModule, DatePipe } from '@angular/common';
-import { TableModule } from 'primeng/table';
-import { DatePicker } from 'primeng/datepicker';
-import { InputGroupModule } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { InputNumberModule } from 'primeng/inputnumber';
-interface City {
-  name: string,
-  code: string
-}
+import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
+import { SharedModule } from '../shared/shared.module';
+import { NavbarComponent } from '../common/navbar/navbar.component';
+
 @Component({
   selector: 'app-time-tracker',
-  imports: [NavbarComponent,
-    DialogModule, ButtonModule, InputTextModule,
-    CardModule,
-    MultiSelectModule,
-    Select,
-    TableModule,
-    InputTextModule,
+  imports: [
+    NavbarComponent,
+    SharedModule,
     CommonModule,
     FormsModule,
-    DatePicker,
-    DatePipe,
-    InputGroupModule,
-    InputGroupAddonModule,
-    InputNumberModule
   ],
   standalone: true,
   templateUrl: './time-tracker.component.html',
-  styleUrl: './time-tracker.component.scss'
+  styleUrl: './time-tracker.component.scss',
+  providers: [MessageService]
 })
 export class TimeTrackerComponent implements OnInit {
-  taskss: any[] = [{ t_name: '', start_time: '', end_time: '', totaltime: '', description: '' }];
-
-  startTime: string | null = null
-  endTime: string | null = null
-  totalTime: string | null =null
-  description: string = ''
-
+  taskss: any[] = [{ clone: '', t_name: '', start_time: 0, end_time: 0, totalTime: 0, description: '' }];
   dates: Date = new Date
   maxDate: Date | undefined;
   id!: number;
   clients: { c_name: string, id: number }[] = []
-  selectedClients:string = ''
+  selectedClients: string = ''
 
   projects: { p_name: string, id: number }[] = []
-  selectedprojects: string= ''
+  selectedprojects: string = ''
 
-  tasks: { t_name: string, id: number }[] = []
+  tasks: { t_name: string, id: number, p_id?: number }[] = []
   selectedtasks: string = ''
+  disableClone: boolean = false;
 
-
-  constructor(private getServices: DefaultService, private httpClient: HttpClient) { }
+  constructor(private getServices: DefaultService, private httpClient: HttpClient, private messageService: MessageService, private ngZone: NgZone) { }
   getProjects(number: SelectChangeEvent) {
     this.selectedClients = number.value.c_name
     const url = `http://localhost:3000/projects?c_id=${number.value.id}`
@@ -71,7 +46,7 @@ export class TimeTrackerComponent implements OnInit {
         this.projects = res
       }
     )
-
+    this.disableClone = true
   }
   getTasks(number: SelectChangeEvent) {
     this.selectedprojects = number.value.p_name
@@ -80,37 +55,121 @@ export class TimeTrackerComponent implements OnInit {
       (res) => {
         this.tasks = res
         console.log(res);
-
       }
     )
+    this.disableClone = true
   }
 
   getTaskName(number: SelectChangeEvent) {
     this.selectedtasks = number.value.t_name
   }
 
-  newTasks:any[]=[]
   logs() {
-    const newTask = {
-      t_name: this.selectedtasks,
-      start_time: this.startTime? new Date(this.startTime).getTime(): null,
-      end_time: this.endTime ? new Date(this.endTime).getTime() : null,
-      description: this.description
-    }
-    this.newTasks.push(newTask)
+    const transformedTasks = this.taskss.map((task) => {
+      const taskName = typeof task.t_name === 'object' ? task.t_name.t_name : task.t_name;
+      const startTime = task.start_time ? new Date(task.start_time).getTime() : 0;
+      const endTime = task.end_time ? new Date(task.end_time).getTime() : 0;
+      const totalTimeInMs = endTime - startTime;
+      const hours = Math.floor(totalTimeInMs / 3600000);
+      const minutes = Math.floor((totalTimeInMs % 3600000) / 60000);
+      const seconds = Math.floor((totalTimeInMs % 60000) / 1000);
+      const formattedTotalTime = `${hours}hr ${minutes}min ${seconds}sec`;
+      return {
+        t_name: taskName,
+        start_time: startTime,
+        end_time: endTime,
+        totalTime: formattedTotalTime,
+        description: task.description
+      };
+    });
+    this.taskss.push(transformedTasks)
     const url = `http://localhost:3000/logs`
     const requesbody = {
       u_id: this.id,
-      date:this.formatDate(this.dates),
+      date: this.formatDate(this.dates),
       c_name: this.selectedClients,
       p_name: this.selectedprojects,
-      tasks:this.newTasks
+      tasks: transformedTasks
     }
     this.httpClient.post(url, requesbody).subscribe(
       (res) => {
         console.log(res);
+        this.disableClone = false
       }
     )
+  }
+
+  MAX_TASK_TIME = 9 * 3600000;
+  totalElapsedTime = 0;
+  sharedProgress = 0;
+
+  calculateTotalTime(task: any) {
+    if (task.start_time && task.end_time) {
+      const startTime = new Date(task.start_time).getTime();
+      const endTime = new Date(task.end_time).getTime();
+
+      if (endTime > startTime) {
+        const elapsedTimeInMs = endTime - startTime;
+        if (task.previousElapsedTime) {
+          this.totalElapsedTime -= task.previousElapsedTime;
+        }
+        if (this.totalElapsedTime + elapsedTimeInMs > this.MAX_TASK_TIME) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Limit Exceeded',
+            detail: `Cannot add time. Total time exceeds the 9-hour limit.`,
+          });
+          task.totalTime = "Exceeds limit";
+          task.displayedTime = "Exceeds limit";
+          return;
+        }
+        const hours = Math.floor(elapsedTimeInMs / 3600000);
+        const minutes = Math.floor((elapsedTimeInMs % 3600000) / 60000);
+        const seconds = Math.floor((elapsedTimeInMs % 60000) / 1000);
+
+        task.totalTime = `${hours}hr ${minutes}min ${seconds}sec`;
+        task.displayedTime = task.totalTime;
+        this.totalElapsedTime += elapsedTimeInMs;
+        task.previousElapsedTime = elapsedTimeInMs;
+        this.updateSharedProgress();
+      } else {
+        task.totalTime = "Invalid time range";
+        task.displayedTime = "Invalid time range";
+      }
+    }
+  }
+
+  updateSharedProgress() {
+    const cappedTimeInMs = Math.min(this.totalElapsedTime, this.MAX_TASK_TIME);
+    this.sharedProgress = (cappedTimeInMs / this.MAX_TASK_TIME) * 100;
+    if (this.sharedProgress >= 100) {
+      this.sharedProgress = 100;
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Success',
+        detail: 'Reached the maximum allowed time (9 hours).',
+      });
+    }
+  }
+
+  formatTime(milliseconds: number): string {
+    const hours = Math.floor(milliseconds / 3600000);
+    const minutes = Math.floor((milliseconds % 3600000) / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
+    return `${hours}hr ${minutes}min`;
+  }
+
+  showError() {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Disabled! Please select clients and projects', life: 2000 });
+  }
+
+  cloneData(data: any) {
+    const clonedRow = { ...data }
+    this.taskss.push(clonedRow)
+    if (this.selectedClients && this.selectedprojects) {
+      this.disableClone = false
+      this.showError()
+    }
   }
   ngOnInit() {
     this.getServices.getCLient().subscribe(
@@ -121,6 +180,7 @@ export class TimeTrackerComponent implements OnInit {
     this.getServices.getMe().subscribe(
       (res) => {
         this.id = res.user.id
+        // this.getLogs()
       }
     )
     let today = new Date();
@@ -134,43 +194,5 @@ export class TimeTrackerComponent implements OnInit {
     const year = date.getFullYear();
     return `${month}-${day}-${year}`;
   }
-  updateTotalTime() {
-    if (this.startTime && this.endTime) {
-      const startMillis = new Date(this.startTime).getTime();
-      const endMillis = new Date(this.endTime).getTime();
-      this.totalTime = this.calculateTotalTime(startMillis, endMillis);
-    } else {
-      this.totalTime = null;
-    }
-  }
-  calculateTotalTime(startMillis: number, endMillis: number): string {
-    const diffMillis = endMillis - startMillis;
 
-    const hours = Math.floor(diffMillis / (1000 * 60 * 60));
-    const minutes = Math.floor((diffMillis % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diffMillis % (1000 * 60)) / 1000);
-
-    return `${hours}h ${minutes}m ${seconds}s`;
-  }
-  // addTask() {
-  //   if (this.newTask.t_name && this.newTask.start_time && this.newTask.end_time) {
-  //     // Calculate total time
-  //     const startMillis = new Date(this.newTask.start_time).getTime();
-  //     const endMillis = new Date(this.newTask.end_time).getTime();
-
-  //     if (startMillis && endMillis && endMillis > startMillis) {
-  //       this.newTask.totaltime = this.calculateTotalTime(startMillis, endMillis);
-  //     } else {
-  //       this.newTask.totaltime = 'Invalid time range';
-  //     }
-
-  //     // Push the new task to the array
-  //     this.tasks.push({ ...this.newTask }); // Spread operator to avoid reference issues
-
-  //     // Reset the newTask object for the next input
-  //     this.newTask = { t_name: '', start_time: '', end_time: '', totaltime: '', description:'' };
-  //   } else {
-  //     alert('Please fill in all the fields before adding a new task.');
-  //   }
-  // }
 }
