@@ -35,8 +35,8 @@ export interface Logs{
 
 export interface Task{
   t_name: string
-  start_time: number | Date | null
-  end_time: number  | Date | null;
+  start_time: number  | null
+  end_time: number   | null;
   description: string
   totalTime?: number | string | undefined
 }

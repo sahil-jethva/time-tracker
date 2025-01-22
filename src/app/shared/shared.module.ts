@@ -28,6 +28,8 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
 import { MegaMenuModule } from 'primeng/megamenu';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 
 const PRIME_NG_SHARED_MODULES = [
@@ -58,7 +60,9 @@ const PRIME_NG_SHARED_MODULES = [
   SelectModule,
   DatePickerModule,
   ToastModule,
-  MegaMenuModule
+  MegaMenuModule,
+  IconFieldModule,
+  InputIconModule
 ];
 
 

@@ -7,12 +7,14 @@ import { LoginComponent } from './authentication/login/login.component';
 import { AuthGuardService } from './Services/auth-guard.service';
 import { ProtectedAuthGuardService } from './Services/protected-auth-guard.service';
 import { LogoutComponent } from './authentication/logout/logout.component';
+import { SearchRecordComponent } from './search-record/search-record.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent, canActivate: [AuthGuardService] },
   { path: 'Navbar', component: NavbarComponent },
   { path: 'Home', component: HomeComponent,canActivate:[ProtectedAuthGuardService] },
   { path: 'timeTracker', component: TimeTrackerComponent, canActivate: [ProtectedAuthGuardService] },
+  {path: 'search', component:SearchRecordComponent, canActivate:[ProtectedAuthGuardService]},
   { path: 'Register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   {path:'logout',component:LogoutComponent}

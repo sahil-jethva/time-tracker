@@ -1,0 +1,69 @@
+<app-navbar />
+<p-card class="p-card-body">
+  <div class="p-card-content">
+    <div class="grid">
+      <div class="col-3">
+        <p-select [options]="clients" [fluid]="true" [checkmark]="true" [(ngModel)]="selectedClients" appendTo="body"
+          optionLabel="c_name" (onChange)="getProjects($event)" placeholder="All"
+          styleClass="w-full md:w-100" />
+      </div>
+      <div class="col-3">
+        <p-select [options]="projects" [fluid]="true" [checkmark]="true" [(ngModel)]="selectedprojects" appendTo="body"
+          optionLabel="p_name" (onChange)="getTasks($event)" placeholder="All"
+          styleClass="w-full md:w-100" />
+      </div>
+      <div class="col-3" style="display: flex; justify-content: space-between; gap: 1em;">
+        <p-datepicker [(ngModel)]="fromDate" appendTo="body" />
+        <p-datepicker [(ngModel)]="toDate" appendTo="body" />
+      </div>
+    </div>
+    <p-button label="fetch" class=" display-flex m-10" [style]="{'margin-top':'10px'}" (click)="getData()"></p-button>
+  </div>
+</p-card>
+@if (logs && logs.length>0) {
+<p-card class="p-card-body">
+  <div class="p-card-content">
+    <p-table #dt2 dataKey="id" [value]="logs" [rows]="5" [paginator]="true"
+      [globalFilterFields]="['date','c_name', 'p_name','tasks.t_name','tasks.description']"
+      [rowsPerPageOptions]="[5,10,15,20]">
+      <ng-template #caption>
+        <div class="flex">
+          <p-iconfield iconPosition="left" class="ml-auto">
+            <p-inputicon>
+              <i class="pi pi-search"></i>
+            </p-inputicon>
+            <input #globalFilterInput pInputText type="text"
+              (input)="dt2.filterGlobal(globalFilterInput.value, 'contains')" placeholder="Search keyword" />
+          </p-iconfield>
+        </div>
+      </ng-template>
+      <ng-template #header>
+        <tr>
+          <th style="text-align: center;">Date</th>
+          <th style="text-align: center;">Client</th>
+          <th style="text-align: center;">Project</th>
+          <th style="text-align: center;">Task Name</th>
+          <th style="text-align: center;">Start Time</th>
+          <th style="text-align: center;">End Time</th>
+          <th style="text-align: center;">Time Spent</th>
+          <th style="text-align: center;">Comment</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-item>
+        @for (search of item.tasks; track $index) {
+        <tr>
+          <td style="text-align: center;">{{item.date}}</td>
+          <td style="text-align: center;">{{item.c_name}}</td>
+          <td style="text-align: center;">{{item.p_name}}</td>
+          <td style="text-align: center;">{{search.t_name}}</td>
+          <td style="text-align: center;">{{convertMillisecondsToTime(search.start_time)}}</td>
+          <td style="text-align: center;">{{convertMillisecondsToTime(search.end_time)}}</td>
+          <td style="text-align: center;">{{search.totalTime}}</td>
+          <td style="text-align: center;">{{search.description}}</td>
+        </tr>
+        }
+      </ng-template>
+    </p-table>
+  </div>
+</p-card>
+}

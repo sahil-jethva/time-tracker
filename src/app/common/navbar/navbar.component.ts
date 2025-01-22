@@ -35,6 +35,12 @@ export class NavbarComponent implements OnInit {
         icon: 'pi pi-clock',
         root: true,
         routerLink:'/timeTracker'
+      },
+      {
+        label: 'Search-Records ',
+        icon: 'pi pi-search',
+        root: true,
+        routerLink: '/search'
       }
     ];
     this.userLoggedInDetail()
