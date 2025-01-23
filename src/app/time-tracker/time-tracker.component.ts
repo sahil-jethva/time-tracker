@@ -25,7 +25,6 @@ import { NavbarComponent } from '../common/navbar/navbar.component';
 export class TimeTrackerComponent implements OnInit {
   taskss: any[] = [{ delete: '', clone: '', c_name: '', p_name: '', t_name: '', start_time: 0, end_time: 0, totalTime: 0, description: '' }];
   dates: Date = new Date
-  maxDate: Date | undefined;
   id!: number;
   clients: { c_name: string, id: number }[] = []
   selectedClients: string = ''
@@ -35,10 +34,11 @@ export class TimeTrackerComponent implements OnInit {
 
   tasks: { t_name: string, id: number, p_id?: number }[] = []
   selectedtasks: string = ''
-  isDateDisabled: boolean = true;
-  toggleDateField() {
-    this.isDateDisabled = !this.isDateDisabled;
-  }
+
+  MAX_TASK_TIME = 15 * 3600000;
+  totalElapsedTime = 0;
+  sharedProgress = 0;
+
 
   constructor(private getServices: DefaultService, private httpClient: HttpClient, private messageService: MessageService) { }
 
@@ -62,17 +62,15 @@ export class TimeTrackerComponent implements OnInit {
     this.selectedtasks = number.value.t_name
   }
   save() {
-    // Group tasks by client and project
     const groupedTasks = this.taskss.reduce((acc, task) => {
+      const date = this.formatDate(task.dates)
       const clientName = task.selectedClients?.c_name;
       const projectName = task.selectedprojects?.p_name;
-      const key = `${clientName}_${projectName}`;
+      const key = `${clientName}_${projectName}_${date}`;
 
       if (!acc[key]) {
         acc[key] = [];
       }
-
-      // Format individual task details
       const taskName = typeof task.selectedtasks?.t_name === 'object'
         ? task.selectedtasks?.t_name.t_name
         : task.selectedtasks?.t_name;
@@ -89,39 +87,37 @@ export class TimeTrackerComponent implements OnInit {
         totalTime = `${hours}hr ${minutes}min ${seconds}sec`;
       }
       acc[key].push({
-        taskName,
-        startTime,
-        endTime,
+        t_name: taskName,
+        start_time: startTime,
+        end_time: endTime,
         totalTime,
         description: task.description,
       });
 
       return acc;
     }, {});
-
-    // Create request body entries for each client-project pair
     const requestBodies = Object.entries(groupedTasks).map(([key, tasks]) => {
-      const [clientName, projectName] = key.split('_');
+      const [clientName, projectName, date] = key.split('_');
       return {
         u_id: this.id,
-        date: this.formatDate(this.dates),
+        date: date,
         c_name: clientName,
         p_name: projectName,
         tasks,
       };
     });
-
-    // Send each grouped entry to the backend
     const url = `http://localhost:3000/logs`;
     requestBodies.forEach((requestBody) => {
       this.httpClient.post(url, requestBody).subscribe(
         (res) => {
-          console.log('Data saved successfully:', res);
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: `Data for ${requestBody.c_name} - ${requestBody.p_name} saved successfully!`,
           });
+          this.taskss = [{}]
+          this.sharedProgress = 0;
+          this.totalElapsedTime = 0
         },
         (error) => {
           console.error('Error saving data:', error);
@@ -134,69 +130,6 @@ export class TimeTrackerComponent implements OnInit {
       );
     });
   }
-  getLogsForDate() {
-    const formattedDate = this.formatDate(this.dates); // Format the selected date
-    const url = `http://localhost:3000/logs/getByDate?u_id=${this.id}&date=${formattedDate}`;
-
-    this.httpClient.get<{ logs: any[] }>(url).subscribe(
-      (res) => {
-        if (res.logs && res.logs.length > 0) {
-          this.taskss = res.logs.flatMap((log) =>
-            log.tasks.map((task: any) => ({
-              delete: '',
-              clone: '',
-              c_name: log?.c_name,
-              p_name: log?.p_name,
-              t_name: task?.taskName,
-              start_time: task?.startTime,
-              end_time: task?.endTime,
-              totalTime: task?.totalTime,
-              description: task?.description || '',
-            }))
-          );
-          console.log('Logs fetched successfully:', res.logs);
-        } else {
-          this.taskss = [];
-          this.messageService.add({
-            severity: 'info',
-            summary: 'No Logs Found',
-            detail: 'No logs found for the selected date.',
-          });
-        }
-      },
-      (error) => {
-        console.error('Error fetching logs:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to fetch logs for the selected date.',
-        });
-      }
-    );
-  }
-  convertMillisecondsToTime(timestamp: number): string {
-    const date = new Date(timestamp);
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    return `${hours}:${minutes}:${seconds}`;
-  }
-
-  onDateChange() {
-    const today = new Date().toISOString().split('T')[0];
-    const selectedDate = this.dates.toISOString().split('T')[0];
-
-    if (selectedDate < today) {
-      this.getLogsForDate();
-    } else {
-      this.taskss = [{ delete: '', clone: '', c_name: '', p_name: '', t_name: '', start_time: 0, end_time: 0, totalTime: 0, description: '' }];
-    }
-  }
-
-
-  MAX_TASK_TIME = 9 * 3600000;
-  totalElapsedTime = 0;
-  sharedProgress = 0;
 
   calculateTotalTime(task: any, event: any) {
     if (task.start_time && task.end_time) {
@@ -237,7 +170,6 @@ export class TimeTrackerComponent implements OnInit {
     }
   }
 
-
   updateSharedProgress() {
     const cappedTimeInMs = Math.min(this.totalElapsedTime, this.MAX_TASK_TIME);
     this.sharedProgress = (cappedTimeInMs / this.MAX_TASK_TIME) * 100;
@@ -251,19 +183,10 @@ export class TimeTrackerComponent implements OnInit {
     }
   }
 
-
-  formatTime(milliseconds: number): string {
-    const hours = Math.floor(milliseconds / 3600000);
-    const minutes = Math.floor((milliseconds % 3600000) / 60000);
-    const seconds = Math.floor((milliseconds % 60000) / 1000);
-    return `${hours}hr ${minutes}min`;
-  }
-
   addRow() {
     const clonedRow = {}
     this.taskss.push(clonedRow)
   }
-
 
   cloneData(data: any) {
     const clonedRow = {
@@ -276,7 +199,7 @@ export class TimeTrackerComponent implements OnInit {
       ? new Date(this.taskss[this.taskss.length - 1].end_time).getTime()
       : new Date().getTime();
 
-    const newStartTime = new Date(lastTaskEndTime + 3600000);
+    const newStartTime = new Date(lastTaskEndTime + 60);
     const newEndTime = new Date(newStartTime.getTime() + 3600000);
     if (this.totalElapsedTime + (newEndTime.getTime() - newStartTime.getTime()) > this.MAX_TASK_TIME) {
       this.messageService.add({
@@ -291,6 +214,7 @@ export class TimeTrackerComponent implements OnInit {
     clonedRow.totalTime = this.formatTime(newEndTime.getTime() - newStartTime.getTime());
     clonedRow.previousElapsedTime = newEndTime.getTime() - newStartTime.getTime();
     clonedRow.description = '';
+
     this.taskss.push(clonedRow);
     this.totalElapsedTime += newEndTime.getTime() - newStartTime.getTime();
     this.updateSharedProgress();
@@ -299,6 +223,8 @@ export class TimeTrackerComponent implements OnInit {
 
   deleteRow(row: any) {
     this.taskss = this.taskss.filter((task) => task !== row);
+    this.totalElapsedTime = 0;
+    this.sharedProgress = 0;
   }
   ngOnInit() {
     this.getServices.getCLient().subscribe(
@@ -309,12 +235,8 @@ export class TimeTrackerComponent implements OnInit {
     this.getServices.getMe().subscribe(
       (res) => {
         this.id = res.user.id
-        // this.getLogs()
       }
     )
-    let today = new Date();
-    this.maxDate = new Date();
-    this.maxDate.setDate(today.getDate() + 3);
   }
 
   formatDate(date: Date): string {
@@ -323,5 +245,17 @@ export class TimeTrackerComponent implements OnInit {
     const year = date.getFullYear();
     return `${month}-${day}-${year}`;
   }
-
+  formatTime(milliseconds: number): string {
+    const hours = Math.floor(milliseconds / 3600000);
+    const minutes = Math.floor((milliseconds % 3600000) / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
+    return `${hours}hr ${minutes}min`;
+  }
+  convertMillisecondsToTime(timestamp: number): string {
+    const date = new Date(timestamp);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  }
 }

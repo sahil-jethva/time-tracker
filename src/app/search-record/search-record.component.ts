@@ -22,12 +22,11 @@ import { FormsModule } from '@angular/forms';
   providers: [MessageService]
 })
 export class SearchRecordComponent implements OnInit {
-  // logs: Logs[]=[{date:'',c_name:'',p_name:'',tasks:[],u_id:0}];
-  logs: any[] = [];
-
+  logs: Logs[] = [];
   id!: number;
   fromDate: Date = new Date
   toDate: Date = new Date
+
   clients: { c_name: string, id: number }[] = []
   selectedClients: string = ''
 
@@ -54,7 +53,6 @@ export class SearchRecordComponent implements OnInit {
     this.httpClient.get<Tasks[]>(url).subscribe(
       (res) => {
         this.tasks = res
-        console.log(res);
       }
     )
   }
@@ -72,16 +70,16 @@ export class SearchRecordComponent implements OnInit {
     this.httpClient.get<{ logs: Logs[] }>(url).subscribe(
       (res) => {
         this.logs = res.logs;
-        this.selectedClients= ''
-        this.selectedprojects=''
+        this.selectedClients = ''
+        this.selectedprojects = ''
       }
     );
+
   }
 
   ngOnInit(): void {
     this.getServices.getCLient().subscribe(
       (res) => {
-        console.log(res);
         this.clients = res
       }
     )
@@ -104,6 +102,4 @@ export class SearchRecordComponent implements OnInit {
     const seconds = date.getSeconds().toString().padStart(2, '0');
     return `${hours}:${minutes}:${seconds}`;
   }
-
-
 }

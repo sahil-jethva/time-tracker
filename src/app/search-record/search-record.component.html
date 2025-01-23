@@ -4,13 +4,11 @@
     <div class="grid">
       <div class="col-3">
         <p-select [options]="clients" [fluid]="true" [checkmark]="true" [(ngModel)]="selectedClients" appendTo="body"
-          optionLabel="c_name" (onChange)="getProjects($event)" placeholder="All"
-          styleClass="w-full md:w-100" />
+          optionLabel="c_name" (onChange)="getProjects($event)" placeholder="All" styleClass="w-full md:w-100" />
       </div>
       <div class="col-3">
         <p-select [options]="projects" [fluid]="true" [checkmark]="true" [(ngModel)]="selectedprojects" appendTo="body"
-          optionLabel="p_name" (onChange)="getTasks($event)" placeholder="All"
-          styleClass="w-full md:w-100" />
+          optionLabel="p_name" (onChange)="getTasks($event)" placeholder="All" styleClass="w-full md:w-100" />
       </div>
       <div class="col-3" style="display: flex; justify-content: space-between; gap: 1em;">
         <p-datepicker [(ngModel)]="fromDate" appendTo="body" />
@@ -23,7 +21,7 @@
 @if (logs && logs.length>0) {
 <p-card class="p-card-body">
   <div class="p-card-content">
-    <p-table #dt2 dataKey="id" [value]="logs" [rows]="5" [paginator]="true"
+    <p-table #dt2 dataKey="id" [value]="logs" [scrollable]="true" scrollHeight="200px" [rows]="5" [paginator]="true"
       [globalFilterFields]="['date','c_name', 'p_name','tasks.t_name','tasks.description']"
       [rowsPerPageOptions]="[5,10,15,20]">
       <ng-template #caption>
@@ -55,7 +53,7 @@
           <td style="text-align: center;">{{item.date}}</td>
           <td style="text-align: center;">{{item.c_name}}</td>
           <td style="text-align: center;">{{item.p_name}}</td>
-          <td style="text-align: center;">{{search.t_name}}</td>
+          <td style="text-align: center;">{{search?.t_name}}</td>
           <td style="text-align: center;">{{convertMillisecondsToTime(search.start_time)}}</td>
           <td style="text-align: center;">{{convertMillisecondsToTime(search.end_time)}}</td>
           <td style="text-align: center;">{{search.totalTime}}</td>

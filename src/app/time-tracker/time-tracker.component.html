@@ -17,7 +17,7 @@
         </p-button>
       </div> -->
     </div>
-    <p-table [value]="taskss" showGridlines dataKey="id">
+    <p-table [value]="taskss" [scrollable]="true" scrollHeight="300px" showGridlines dataKey="id">
       <ng-template #header>
         <tr>
           <th width="10%" style="text-align: center;">
@@ -27,7 +27,7 @@
             Clone
           </th>
           <th width="10%" style="text-align: center;">
-            Date
+            Select Date
           </th>
           <th width="10%" style="text-align: center;">
             Select Clients
@@ -63,9 +63,15 @@
             <p-toast />
             <p-button (click)="cloneData(data)" icon="pi pi-clone" />
           </td>
-          <td style="text-align: center;">
-            <p-datepicker [(ngModel)]="data.dates" [maxDate]="maxDate"
-              (onSelect)="onDateChange()" appendTo="body" />
+          <td style="text-align: center;" [pEditableColumn]="data.dates" pEditableColumnField="date">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-datepicker [(ngModel)]="data.dates" appendTo="body" />
+              </ng-template>
+              <ng-template #output>
+                {{formatDate(data.dates)}}
+              </ng-template>
+            </p-cellEditor>
           </td>
           <td style="text-align: center;" [pEditableColumn]="data.c_name" pEditableColumnField="c_name">
             <p-cellEditor>
