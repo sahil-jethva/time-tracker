@@ -1,21 +1,14 @@
+@if (isManual) {
 <app-navbar />
 <p-card class="p-card-body">
   <div class="p-card-content">
+    <p-button (click)="toggleManual()" [label]="isManual?'Switch to Manual':'Switch to Timer'"></p-button>
     <div class="mb-4 mt-4" style="position: relative; width: 100%;">
       <p-progressBar [showValue]="false" [value]="sharedProgress">
       </p-progressBar>
       <span
         style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; text-align: center;">
         {{ formatTime(totalElapsedTime) }}</span>
-    </div>
-    <div class="grid mb-3">
-      <!-- <div class="col-3" [style]="{'display':'flex' ,'gap':'10px'}">
-        <p-datepicker [(ngModel)]="dates" [maxDate]="maxDate" [disabled]="isDateDisabled" (onSelect)="onDateChange()"
-          appendTo="body" />
-        <p-button (click)="toggleDateField()" tooltipPosition="top" [pTooltip]="isDateDisabled?'Unlock to':'Lock to'">
-          {{ isDateDisabled ? 'Yes' : 'No' }}
-        </p-button>
-      </div> -->
     </div>
     <p-table [value]="taskss" [scrollable]="true" scrollHeight="300px" showGridlines dataKey="id">
       <ng-template #header>
@@ -63,7 +56,7 @@
             <p-toast />
             <p-button (click)="cloneData(data)" icon="pi pi-clone" />
           </td>
-          <td style="text-align: center;" [pEditableColumn]="data.dates" pEditableColumnField="date">
+          <td style="text-align: center;" [pEditableColumn]="data.dates" pEditableColumnField="dates">
             <p-cellEditor>
               <ng-template #input>
                 <p-datepicker [(ngModel)]="data.dates" appendTo="body" />
@@ -113,7 +106,7 @@
             <p-cellEditor>
               <ng-template #input>
                 <p-datepicker [(ngModel)]="data.start_time" appendTo="body" [timeOnly]="true" [showSeconds]="true"
-                  [hourFormat]="'24'" (ngModelChange)="calculateTotalTime(data,$event)" [showTime]="true" />
+                  [hourFormat]="'24'" (ngModelChange)="calculateTotalTime(data)" [showTime]="true" />
               </ng-template>
               <ng-template #output>
                 {{data?.start_time | date:'HH:mm:ss'}}
@@ -124,7 +117,7 @@
             <p-cellEditor>
               <ng-template #input>
                 <p-datepicker [(ngModel)]="data.end_time" appendTo="body" [timeOnly]="true" [showSeconds]="true"
-                  [hourFormat]="'24'" (ngModelChange)="calculateTotalTime(data,$event)" [showTime]="true" />
+                  [hourFormat]="'24'" (ngModelChange)="calculateTotalTime(data)" [showTime]="true" />
               </ng-template>
               <ng-template #output>
                 {{data?.end_time | date:'HH:mm:ss'}}
@@ -154,3 +147,156 @@
       icon="pi pi-save" />
   </div>
 </p-card>
+}
+@if (!isManual) {
+<app-navbar />
+<p-card class="p-card-body">
+  <div class="p-card-content">
+    <div class="flex justify-content-between">
+      <p-button (click)="toggleManual()" [label]="isManual?'Switch to Manual':'Switch to Timer'" />
+      <div class="flex justify-content-between gap-4">
+        <h2 class="font-semibold transition-all">{{formatTimes(elapsedTime)}}</h2>
+        <p-toast />
+        <p-button (click)="isStart?startTimer():pauseTimer()" [label]="isStart?'Start':'Stop'"
+          [style]="isStart?{'background-color':'blue' ,'border-color':'blue'}:{'background-color':'red' ,'border-color':'red'}"
+          [icon]="isStart?'pi pi-play':'pi pi-pause'" />
+      </div>
+    </div>
+  </div>
+</p-card>
+@if (inter.length >0) {
+<p-card class="p-card-body">
+  <div class="p-card-content">
+    <p-table [value]="inter" [scrollable]="true" scrollHeight="300px" showGridlines dataKey="id">
+      <ng-template #header>
+        <tr>
+          <th width="10%" style="text-align: center;">
+            Select Date
+          </th>
+          <th width="10%" style="text-align: center;">
+            Select Clients
+          </th>
+          <th width="10%" style="text-align: center;">
+            Select Projects
+          </th>
+          <th width="10%" style="text-align: center;">
+            Select tasks
+          </th>
+          <th width="10%" style="text-align: center;">
+            Start Time
+          </th>
+          <th width="10%" style="text-align: center;">
+            End Time
+          </th>
+          <th width="10%" style="text-align: center;">
+            Total Time
+          </th>
+          <th width="10%" style="text-align: center;">
+            Resume
+          </th>
+          <th width="10%" style="text-align: center;">
+            Description
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-data let-editing="editing">
+        <tr>
+          <td style="text-align: center;" [pEditableColumn]="data.dates" pEditableColumnField="dates">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-datepicker [(ngModel)]="data.dates" appendTo="body" />
+              </ng-template>
+              <ng-template #output>
+                {{formatDate(data.dates)}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td style="text-align: center;" [pEditableColumn]="data.c_name" pEditableColumnField="c_name">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-select [options]="clients" [fluid]="true" [filter]="true" [resetFilterOnHide]="true"
+                  [checkmark]="true" [(ngModel)]="data.selectedClients" appendTo="body" optionLabel="c_name"
+                  (onChange)="getProjects(data)" placeholder="Select Clients" styleClass="w-full md:w-100" />
+              </ng-template>
+              <ng-template #output>
+                {{data?.selectedClients?.c_name}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td style="text-align: center;" [pEditableColumn]="data.p_name" pEditableColumnField="p_name">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-select [options]="data.projects" [fluid]="true" [filter]="true" [resetFilterOnHide]="true"
+                  [checkmark]="true" [(ngModel)]="data.selectedprojects" appendTo="body" optionLabel="p_name"
+                  (onChange)="getTasks(data)" placeholder="Select Projects" styleClass="w-full md:w-100" />
+              </ng-template>
+              <ng-template #output>
+                {{data?.selectedprojects?.p_name}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td style="text-align: center;" [pEditableColumn]="data.t_name" pEditableColumnField="t_name">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-select [options]="data.tasks" [filter]="true" [checkmark]="true" [resetFilterOnHide]="true"
+                  [(ngModel)]="data.selectedtasks" appendTo="body" optionLabel="t_name" (onChange)="getTaskName($event)"
+                  placeholder="Select tasks" />
+              </ng-template>
+              <ng-template #output>
+                {{data?.selectedtasks?.t_name}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td style="text-align: center;" [pEditableColumn]="data.start" pEditableColumnField="start">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-datepicker [(ngModel)]="data.start" appendTo="body" [timeOnly]="true" [showSeconds]="true"
+                  [hourFormat]="'24'" (ngModelChange)="calculateTotalTime(data)" [showTime]="true" />
+              </ng-template>
+              <ng-template #output>
+                {{data?.start| date:'HH:mm:ss'}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td style="text-align: center;" [pEditableColumn]="data.end" pEditableColumnField="end">
+            <p-cellEditor>
+              <ng-template #input>
+                <p-datepicker [(ngModel)]="data.end" appendTo="body" [timeOnly]="true" [showSeconds]="true"
+                  [hourFormat]="'24'" (ngModelChange)="calculateTotalTime(data)" [showTime]="true" />
+              </ng-template>
+              <ng-template #output>
+                {{data?.end| date:'HH:mm:ss'}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td style="text-align: center;">
+            {{data?.elapsed}}
+          </td>
+          <td style="text-align: center;">
+            <p-button (click)="data.isStart ? startTimer(data) : pauseTimer(data)" [style]="data.isStart
+                      ? {'background-color': 'blue', 'border-color': 'blue'}
+                      : {'background-color': 'red', 'border-color': 'red'}"
+              [icon]="data.isStart ? 'pi pi-play' : 'pi pi-pause'">
+            </p-button>
+          </td>
+          <td style="text-align: center;" [pEditableColumn]="data.description" pEditableColumnField="description">
+            <p-cellEditor>
+              <ng-template #input>
+                <input pInputText [(ngModel)]="data.description" />
+              </ng-template>
+              <ng-template #output>
+                {{data?.description}}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div class="mt-3 flex justify-content-end">
+      <p-button [style]="{'background':'green', 'border-color':'green'}" label="save" icon="pi pi-save"
+        (click)="addLog()"></p-button>
+    </div>
+  </div>
+</p-card>
+}
+}

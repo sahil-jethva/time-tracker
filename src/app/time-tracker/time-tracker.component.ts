@@ -23,7 +23,7 @@ import { NavbarComponent } from '../common/navbar/navbar.component';
   providers: [MessageService]
 })
 export class TimeTrackerComponent implements OnInit {
-  taskss: any[] = [{ delete: '', clone: '', c_name: '', p_name: '', t_name: '', start_time: 0, end_time: 0, totalTime: 0, description: '' }];
+  taskss: any[] = [{ delete: '', clone: '',dates:'', c_name: '', p_name: '', t_name: '', start_time: 0, end_time: 0, totalTime: 0, description: '' }];
   dates: Date = new Date
   id!: number;
   clients: { c_name: string, id: number }[] = []
@@ -39,9 +39,12 @@ export class TimeTrackerComponent implements OnInit {
   totalElapsedTime = 0;
   sharedProgress = 0;
 
+  isManual: boolean = false
 
   constructor(private getServices: DefaultService, private httpClient: HttpClient, private messageService: MessageService) { }
-
+  toggleManual() {
+    this.isManual = !this.isManual;
+  }
   getProjects(row: any) {
     const url = `http://localhost:3000/projects?c_id=${row.selectedClients.id}`
     this.httpClient.get<Projects[]>(url).subscribe(
@@ -115,9 +118,6 @@ export class TimeTrackerComponent implements OnInit {
             summary: 'Success',
             detail: `Data for ${requestBody.c_name} - ${requestBody.p_name} saved successfully!`,
           });
-          this.taskss = [{}]
-          this.sharedProgress = 0;
-          this.totalElapsedTime = 0
         },
         (error) => {
           console.error('Error saving data:', error);
@@ -129,9 +129,12 @@ export class TimeTrackerComponent implements OnInit {
         }
       );
     });
+    this.taskss = [{}]
+    this.sharedProgress = 0;
+    this.totalElapsedTime = 0
   }
 
-  calculateTotalTime(task: any, event: any) {
+  calculateTotalTime(task: any) {
     if (task.start_time && task.end_time) {
       const startTime = new Date(task.start_time).getTime();
       const endTime = new Date(task.end_time).getTime();
@@ -239,12 +242,23 @@ export class TimeTrackerComponent implements OnInit {
     )
   }
 
-  formatDate(date: Date): string {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
+  // formatDate(date: Date): string {
+  //   const day = date.getDate().toString().padStart(2, '0') ;
+  //   const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  //   const year = date.getFullYear();
+  //   return `${month}-${day}-${year}`;
+  // }
+  formatDate(date: any): string {
+    const validDate = date instanceof Date ? date : new Date(date);
+    if (isNaN(date?.getTime())) {
+      return 'Select date';
+    }
+    const day = validDate.getDate().toString().padStart(2, '0');
+    const month = (validDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = validDate.getFullYear();
     return `${month}-${day}-${year}`;
   }
+
   formatTime(milliseconds: number): string {
     const hours = Math.floor(milliseconds / 3600000);
     const minutes = Math.floor((milliseconds % 3600000) / 60000);
@@ -258,4 +272,155 @@ export class TimeTrackerComponent implements OnInit {
     const seconds = date.getSeconds().toString().padStart(2, '0');
     return `${hours}:${minutes}:${seconds}`;
   }
+
+
+  inter: any[] = [];
+  isStart: boolean = true;
+  isRunning: boolean = false;
+  timer: any;
+  elapsedTime: number = 0;
+  startTime: Date | null = null;
+
+
+
+  startTimer(rowData?: any) {
+    if (rowData) {
+      rowData.isStart = false;
+      rowData.isRunning = true;
+    }
+    this.isStart = false;
+    if (!this.isRunning) {
+      this.isRunning = true;
+      this.startTime = new Date();
+      this.elapsedTime = this.calculateElapsedTime(rowData);
+      this.timer = setInterval(() => {
+        this.elapsedTime += 1000;
+      }, 1000);
+    }
+  }
+
+  pauseTimer(rowData?: any) {
+    if (rowData) {
+      rowData.isStart = true;
+      rowData.isRunning = false;
+    }
+    this.isStart = true;
+    if (this.isRunning) {
+      clearInterval(this.timer);
+      this.isRunning = false;
+      const currentEndTime = new Date();
+      const sessionElapsedTime = currentEndTime.getTime() - this.startTime!.getTime();
+      if (rowData) {
+        rowData.end = currentEndTime;
+        rowData.elapsed = this.formatTimes(this.elapsedTime + sessionElapsedTime);
+      } else if (this.startTime) {
+        this.inter.push({
+          start: this.startTime,
+          end: currentEndTime,
+          elapsed: this.formatTimes(sessionElapsedTime),
+          selectedClients: null,
+          selectedProjects: null,
+          selectedTasks: null,
+          description: "",
+        });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: `Time entry has been created!`,
+          life: 2000
+        });
+      }
+      this.elapsedTime = 0;
+      this.startTime = null;
+    }
+  }
+
+
+  addLog() {
+    const groupedTasks = this.inter.reduce((acc, task) => {
+      const date = this.formatDate(task.dates)
+      const clientName = task.selectedClients?.c_name;
+      const projectName = task.selectedprojects?.p_name;
+      const key = `${clientName}_${projectName}_${date}`;
+
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      const taskName = typeof task.selectedtasks?.t_name === 'object'
+        ? task.selectedtasks?.t_name.t_name
+        : task.selectedtasks?.t_name;
+
+      const startTime = task.start ? new Date(task.start).getTime() : null;
+      const endTime = task.end ? new Date(task.end).getTime() : null;
+
+      let totalTime = '0hr 0min 0sec';
+      if (startTime && endTime && endTime > startTime) {
+        const totalTimeInMs = endTime - startTime;
+        const hours = Math.floor(totalTimeInMs / 3600000);
+        const minutes = Math.floor((totalTimeInMs % 3600000) / 60000);
+        const seconds = Math.floor((totalTimeInMs % 60000) / 1000);
+        totalTime = `${hours}hr ${minutes}min ${seconds}sec`;
+      }
+      acc[key].push({
+        t_name: taskName,
+        start_time: startTime,
+        end_time: endTime,
+        totalTime,
+        description: task.description,
+      });
+
+      return acc;
+    }, {});
+    const requestBodies = Object.entries(groupedTasks).map(([key, tasks]) => {
+      const [clientName, projectName, date] = key.split('_');
+      return {
+        u_id: this.id,
+        date: date,
+        c_name: clientName,
+        p_name: projectName,
+        tasks,
+      };
+    });
+    const url = `http://localhost:3000/logs`;
+    requestBodies.forEach((requestBody) => {
+      this.httpClient.post(url, requestBody).subscribe(
+        (res) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: `Data for ${requestBody.c_name} - ${requestBody.p_name} saved successfully!`,
+          });
+        },
+        (error) => {
+          console.error('Error saving data:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Failed to save data for ${requestBody.c_name} - ${requestBody.p_name}!`,
+          });
+        }
+      );
+    });
+    this.inter = [{}]
+
+  }
+
+  calculateElapsedTime(rowData: any): number {
+    const previousElapsedTime = this.parseTimeToMilliseconds(rowData?.elapsed);
+    return previousElapsedTime;
+  }
+
+  parseTimeToMilliseconds(time: string): number {
+    if (!time) return 0;
+    const parts = time.split(':').map(Number);
+    return (parts[0] * 3600 + parts[1] * 60 + parts[2]) * 1000;
+  }
+
+  formatTimes(milliseconds: number): string {
+    const hours = Math.floor(milliseconds / 3600000).toString().padStart(2, '0');
+    const minutes = Math.floor((milliseconds % 3600000) / 60000).toString().padStart(2, '0');
+    const seconds = Math.floor((milliseconds % 60000) / 1000).toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  }
+
 }
