@@ -8,7 +8,16 @@ import { SelectChangeEvent } from 'primeng/select';
 import { Logs, Projects, Tasks } from '../modals/modal';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+interface Column {
+  field: string;
+  header: string;
+  customExportHeader?: string;
+}
 
+interface ExportColumn {
+  title: string;
+  dataKey: string;
+}
 @Component({
   selector: 'app-search-record',
   imports: [
@@ -26,7 +35,9 @@ export class SearchRecordComponent implements OnInit {
   id!: number;
   fromDate: Date = new Date
   toDate: Date = new Date
-
+  flattenedLogs: Logs[] = [];
+  cols!: Column[];
+  exportColumns!: ExportColumn[];
   clients: { c_name: string, id: number }[] = []
   selectedClients: string = ''
 
@@ -72,9 +83,9 @@ export class SearchRecordComponent implements OnInit {
         this.logs = res.logs;
         this.selectedClients = ''
         this.selectedprojects = ''
+        this.flattenedLogs = this.transformData(this.logs);
       }
     );
-
   }
 
   ngOnInit(): void {
@@ -88,7 +99,33 @@ export class SearchRecordComponent implements OnInit {
         this.id = res.user.id
       }
     )
+    this.cols = [
+      { field: 'date', header: 'Date', customExportHeader: 'Dates' },
+      { field: 'c_name', header: 'Clients' },
+      { field: 'p_name', header: 'Projects' },
+      { field: 't_name', header: 'Tasks' },
+      { field: 'totalTime', header: 'Time' },
+      { field: 'description', header: 'Description' }
+    ]
+    this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
   }
+
+
+  transformData(logs: Logs[]): any[] {
+    return logs.flatMap((log) =>
+      log.tasks.map((task) => ({
+        date: log.date,
+        c_name: log.c_name,
+        p_name: log.p_name,
+        t_name: task.t_name,
+        start_time: task.start_time,
+        end_time:task.end_time,
+        totalTime: task.totalTime,
+        description: task.description,
+      }))
+    );
+  }
+
   formatDate(date: Date): string {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');

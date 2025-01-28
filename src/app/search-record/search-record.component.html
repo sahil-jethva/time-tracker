@@ -21,11 +21,12 @@
 @if (logs && logs.length>0) {
 <p-card class="p-card-body">
   <div class="p-card-content">
-    <p-table #dt2 dataKey="id" [value]="logs" [scrollable]="true" scrollHeight="200px" [rows]="5" [paginator]="true"
-      [globalFilterFields]="['date','c_name', 'p_name','tasks.t_name','tasks.description']"
+    <p-table #dt2 [value]="flattenedLogs" [columns]="cols" [exportHeader]="'customExportHeader'" [scrollable]="true"
+      scrollHeight="200px" [rows]="5" [paginator]="true"
+      [globalFilterFields]="['date','c_name', 'p_name','t_name','description']"
       [rowsPerPageOptions]="[5,10,15,20]">
       <ng-template #caption>
-        <div class="flex">
+        <div class="flex gap-3">
           <p-iconfield iconPosition="left" class="ml-auto">
             <p-inputicon>
               <i class="pi pi-search"></i>
@@ -33,6 +34,7 @@
             <input #globalFilterInput pInputText type="text"
               (input)="dt2.filterGlobal(globalFilterInput.value, 'contains')" placeholder="Search keyword" />
           </p-iconfield>
+          <p-button icon="pi pi-external-link" label="Export" (click)="dt2.exportCSV()" />
         </div>
       </ng-template>
       <ng-template #header>
@@ -48,18 +50,16 @@
         </tr>
       </ng-template>
       <ng-template #body let-item>
-        @for (search of item.tasks; track $index) {
         <tr>
           <td style="text-align: center;">{{item.date}}</td>
           <td style="text-align: center;">{{item.c_name}}</td>
           <td style="text-align: center;">{{item.p_name}}</td>
-          <td style="text-align: center;">{{search?.t_name}}</td>
-          <td style="text-align: center;">{{convertMillisecondsToTime(search.start_time)}}</td>
-          <td style="text-align: center;">{{convertMillisecondsToTime(search.end_time)}}</td>
-          <td style="text-align: center;">{{search.totalTime}}</td>
-          <td style="text-align: center;">{{search.description}}</td>
+          <td style="text-align: center;">{{item.t_name}}</td>
+          <td style="text-align: center;">{{convertMillisecondsToTime(item.start_time)}}</td>
+          <td style="text-align: center;">{{convertMillisecondsToTime(item.end_time)}}</td>
+          <td style="text-align: center;">{{item.totalTime}}</td>
+          <td style="text-align: center;">{{item.description}}</td>
         </tr>
-        }
       </ng-template>
     </p-table>
   </div>

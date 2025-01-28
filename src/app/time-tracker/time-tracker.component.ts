@@ -130,8 +130,6 @@ export class TimeTrackerComponent implements OnInit {
       );
     });
     this.taskss = [{}]
-    this.sharedProgress = 0;
-    this.totalElapsedTime = 0
   }
 
   calculateTotalTime(task: any) {
