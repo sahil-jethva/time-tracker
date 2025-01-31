@@ -1,0 +1,1047 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Test User",
+      "email": "test@example.com",
+      "password": "password123"
+    },
+    {
+      "id": 1736329212211,
+      "email": "sj@gmail.com",
+      "password": 12345678,
+      "name": "sharad"
+    },
+    {
+      "id": 1736330097011,
+      "email": "s@gmail.com",
+      "password": "12345678",
+      "name": "s"
+    },
+    {
+      "id": 1736330193931,
+      "email": "jsy@gmail.com",
+      "password": "123456789",
+      "name": "sharad"
+    },
+    {
+      "id": 1736330353065,
+      "email": "hello@gmail.com",
+      "password": "123456789",
+      "name": "hello"
+    },
+    {
+      "id": 1736330407155,
+      "email": "sahil@gmail.com",
+      "password": "123456789",
+      "name": "sahil"
+    },
+    {
+      "id": 1736330500827,
+      "email": "kirtan@gmail.com",
+      "password": "987654321",
+      "name": "kirtan"
+    },
+    {
+      "id": 1738318381461,
+      "email": "Sharad@gmail.com",
+      "password": "123qweas",
+      "name": "Sharad"
+    }
+  ],
+  "client": [
+    {
+      "id": 1,
+      "c_name": "Client A"
+    },
+    {
+      "id": 2,
+      "c_name": "Client B"
+    },
+    {
+      "c_name": "Azure",
+      "id": 3
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "p_name": "Project1",
+      "c_id": 1
+    },
+    {
+      "id": 2,
+      "p_name": "Project2",
+      "c_id": 2
+    },
+    {
+      "p_name": "Project5",
+      "c_id": 1,
+      "id": 3
+    },
+    {
+      "p_name": "omadeous",
+      "c_id": 2,
+      "id": 4
+    },
+    {
+      "p_name": "software",
+      "c_id": 4,
+      "id": 5
+    },
+    {
+      "id": 1736156629797,
+      "p_name": "QSCX",
+      "c_id": 2
+    },
+    {
+      "id": 1736157135359,
+      "p_name": "TGFDHN",
+      "c_id": 2
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "t_name": "Task1",
+      "p_id": 1
+    },
+    {
+      "id": 2,
+      "t_name": "Task2",
+      "p_id": 1
+    },
+    {
+      "id": 3,
+      "t_name": "Task3",
+      "p_id": 2
+    },
+    {
+      "id": 4,
+      "t_name": "Task4",
+      "p_id": 2
+    },
+    {
+      "id": 5,
+      "t_name": "UI",
+      "p_id": 3
+    },
+    {
+      "id": 6,
+      "t_name": "Splitting",
+      "p_id": 3
+    },
+    {
+      "id": 7,
+      "t_name": "NEDJND",
+      "p_id": 3
+    }
+  ],
+  "logs": [
+    {
+      "u_id": 1736330500827,
+      "date": "01-12-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1736680907972,
+          "end_time": 1736684508147,
+          "totalTime": "1hr 0min 0sec",
+          "description": "demoo"
+        }
+      ],
+      "id": 10
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-12-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1736680907972,
+          "end_time": 1736684508147,
+          "totalTime": "1hr 0min 0sec",
+          "description": "demoo"
+        }
+      ],
+      "id": 11
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-13-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1736745856090,
+          "end_time": 1736749757128,
+          "totalTime": "1hr 5min 1sec",
+          "description": "hello"
+        }
+      ],
+      "id": 12
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-13-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1736746698732,
+          "end_time": 1736750300916,
+          "totalTime": "1hr 0min 2sec",
+          "description": "testtt"
+        }
+      ],
+      "id": 13
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-13-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1736746878761,
+          "end_time": 1736750479405,
+          "totalTime": "1hr 0min 0sec",
+          "description": "testtt"
+        }
+      ],
+      "id": 14
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-13-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1736746948021,
+          "end_time": 1736750549679,
+          "totalTime": "1hr 0min 1sec",
+          "description": "demoooo"
+        }
+      ],
+      "id": 15
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-13-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1736747274868,
+          "end_time": 1736754355414,
+          "totalTime": "1hr 58min 0sec",
+          "description": "dmoooo"
+        }
+      ],
+      "id": 16
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-13-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1736420203043,
+          "end_time": 1736431007532,
+          "totalTime": "3hr 0min 4sec",
+          "description": "QQQQQQQ"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1736420203043,
+          "end_time": 1736431007532,
+          "totalTime": "3hr 0min 4sec",
+          "description": "QQQQQQQ"
+        },
+        {
+          "t_name": "Task2",
+          "start_time": 1736423803043,
+          "end_time": 1736427407532,
+          "totalTime": "1hr 0min 4sec",
+          "description": "QSADERF"
+        },
+        {
+          "t_name": "Splitting",
+          "start_time": 1736680907972,
+          "end_time": 1736684508147,
+          "totalTime": "1hr 0min 0sec",
+          "description": "demoo"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1736680907972,
+          "end_time": 1736684508147,
+          "totalTime": "1hr 0min 0sec",
+          "description": "demoo"
+        },
+        {
+          "t_name": "Splitting",
+          "start_time": 1736745856090,
+          "end_time": 1736749757128,
+          "totalTime": "1hr 5min 1sec",
+          "description": "hello"
+        },
+        {
+          "t_name": "Splitting",
+          "start_time": 1736746698732,
+          "end_time": 1736750300916,
+          "totalTime": "1hr 0min 2sec",
+          "description": "testtt"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1736746878761,
+          "end_time": 1736750479405,
+          "totalTime": "1hr 0min 0sec",
+          "description": "testtt"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1736746948021,
+          "end_time": 1736750549679,
+          "totalTime": "1hr 0min 1sec",
+          "description": "demoooo"
+        },
+        {
+          "t_name": "NEDJND",
+          "start_time": 1736747274868,
+          "end_time": 1736754355414,
+          "totalTime": "1hr 58min 0sec",
+          "description": "hello"
+        }
+      ],
+      "id": 17
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-13-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1736420203043,
+          "end_time": 1736431007532,
+          "totalTime": "3hr 0min 4sec",
+          "description": "QQQQQQQ"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1736420203043,
+          "end_time": 1736431007532,
+          "totalTime": "3hr 0min 4sec",
+          "description": "QQQQQQQ"
+        },
+        {
+          "t_name": "Task2",
+          "start_time": 1736423803043,
+          "end_time": 1736427407532,
+          "totalTime": "1hr 0min 4sec",
+          "description": "QSADERF"
+        },
+        {
+          "t_name": "Splitting",
+          "start_time": 1736680907972,
+          "end_time": 1736684508147,
+          "totalTime": "1hr 0min 0sec",
+          "description": "demoo"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1736680907972,
+          "end_time": 1736684508147,
+          "totalTime": "1hr 0min 0sec",
+          "description": "demoo"
+        },
+        {
+          "t_name": "Splitting",
+          "start_time": 1736745856090,
+          "end_time": 1736749757128,
+          "totalTime": "1hr 5min 1sec",
+          "description": "hello"
+        },
+        {
+          "t_name": "Splitting",
+          "start_time": 1736746698732,
+          "end_time": 1736750300916,
+          "totalTime": "1hr 0min 2sec",
+          "description": "testtt"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1736746878761,
+          "end_time": 1736750479405,
+          "totalTime": "1hr 0min 0sec",
+          "description": "testtt"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1736746948021,
+          "end_time": 1736750549679,
+          "totalTime": "1hr 0min 1sec",
+          "description": "demoooo"
+        },
+        {
+          "t_name": "NEDJND",
+          "start_time": 1736747274868,
+          "end_time": 1736754355414,
+          "totalTime": "1hr 58min 0sec",
+          "description": "hello"
+        },
+        {
+          "start_time": 1736747580246,
+          "end_time": 1736751188890,
+          "totalTime": "1hr 0min 8sec",
+          "description": "demoo"
+        }
+      ],
+      "id": 18
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-13-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1736758864748,
+          "end_time": 1736762705134,
+          "totalTime": "1hr 4min 0sec",
+          "description": "testtttt"
+        }
+      ],
+      "id": 19
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-13-2025",
+      "c_name": "Client B",
+      "p_name": "Project2",
+      "tasks": [
+        {
+          "t_name": "Task3",
+          "start_time": 1736759222913,
+          "end_time": 1736762826800,
+          "totalTime": "1hr 0min 3sec",
+          "description": "demoooo"
+        }
+      ],
+      "id": 20
+    },
+    {
+      "u_id": 1736330353065,
+      "date": "01-16-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1737006783163,
+          "end_time": 1737010385038,
+          "totalTime": "1hr 0min 1sec",
+          "description": "testt"
+        }
+      ],
+      "id": 21
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-16-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1737010324325,
+          "end_time": 1737017526632,
+          "totalTime": "2hr 0min 2sec",
+          "description": "hello"
+        }
+      ],
+      "id": 22
+    },
+    {
+      "u_id": 1736330353065,
+      "date": "01-16-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1737024560702,
+          "end_time": 1737029012687,
+          "totalTime": "1hr 14min 11sec",
+          "description": "helloo"
+        }
+      ],
+      "id": 23
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-16-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1737027855628,
+          "end_time": 1737032670284,
+          "totalTime": "1hr 20min 14sec",
+          "description": "demooo"
+        }
+      ],
+      "id": 24
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-16-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1737029182205,
+          "end_time": 1737032783592,
+          "totalTime": "1hr 0min 1sec",
+          "description": "testttt"
+        }
+      ],
+      "id": 25
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-20-2025",
+      "c_name": 1,
+      "p_name": 1,
+      "tasks": [
+        {
+          "t_name": "Task2",
+          "start_time": 1737370913525,
+          "end_time": 1737374515755,
+          "totalTime": "1hr 0min 2sec",
+          "description": "testttss"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1737374538599,
+          "end_time": 1737381740046,
+          "totalTime": "2hr 0min 1sec",
+          "description": "demooss"
+        }
+      ],
+      "id": 26
+    },
+    {
+      "u_id": 1736330353065,
+      "date": "01-20-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task2",
+          "start_time": 1737374088964,
+          "end_time": 1737381289227,
+          "totalTime": "2hr 0min 0sec",
+          "description": "hello"
+        }
+      ],
+      "id": 27
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-21-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1737431334863,
+          "end_time": 1737434936412,
+          "totalTime": "1hr 0min 1sec",
+          "description": "testtt"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1737427734863,
+          "end_time": 1737434936412,
+          "totalTime": "2hr 0min 1sec",
+          "description": "hello"
+        }
+      ],
+      "id": 28
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-21-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1737431334863,
+          "end_time": 1737434936412,
+          "totalTime": "1hr 0min 1sec",
+          "description": "testtt"
+        },
+        {
+          "t_name": "Task1",
+          "start_time": 1737427734863,
+          "end_time": 1737434936412,
+          "totalTime": "2hr 0min 1sec",
+          "description": "hello"
+        },
+        {
+          "start_time": 0,
+          "end_time": 0,
+          "totalTime": "0hr 0min 0sec"
+        }
+      ],
+      "id": 29
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-21-2025",
+      "c_name": "Client B",
+      "p_name": "Project2",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1737433163847,
+          "end_time": 1737440366711,
+          "totalTime": "2hr 0min 2sec",
+          "description": "hello"
+        },
+        {
+          "t_name": "Task3",
+          "start_time": 1737444000201,
+          "end_time": 1737447602431,
+          "totalTime": "1hr 0min 2sec",
+          "description": "testttttt"
+        }
+      ],
+      "id": 30
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-23-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1737603045494,
+          "end_time": 1737613848689,
+          "totalTime": "3hr 0min 3sec",
+          "description": "bugg fixx"
+        }
+      ],
+      "id": 31
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-23-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1737613848749,
+          "end_time": 1737621048749,
+          "totalTime": "2hr 0min 0sec",
+          "description": "UI handle"
+        }
+      ],
+      "id": 32
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-23-2025",
+      "c_name": "Client B",
+      "p_name": "Project2",
+      "tasks": [
+        {
+          "t_name": "Task3",
+          "start_time": 1737603498568,
+          "end_time": 1737610700772,
+          "totalTime": "2hr 0min 2sec",
+          "description": "hello"
+        }
+      ],
+      "id": 33
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-23-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "NEDJND",
+          "start_time": 1737610743389,
+          "end_time": 1737617944478,
+          "totalTime": "2hr 0min 1sec",
+          "description": "typeeee"
+        }
+      ],
+      "id": 34
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-23-2025",
+      "c_name": "Client B",
+      "p_name": "Project2",
+      "tasks": [
+        {
+          "t_name": "Task3",
+          "start_time": 1737610806944,
+          "end_time": 1737621607558,
+          "totalTime": "3hr 0min 0sec",
+          "description": "yesss"
+        }
+      ],
+      "id": 35
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-23-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1737617819949,
+          "end_time": 1737632220149,
+          "totalTime": "4hr 0min 0sec",
+          "description": "shaswat"
+        },
+        {
+          "t_name": "Splitting",
+          "start_time": 1737632220209,
+          "end_time": 1737635820209,
+          "totalTime": "1hr 0min 0sec",
+          "description": "sahil"
+        }
+      ],
+      "id": 36
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-23-2025",
+      "c_name": "Client B",
+      "p_name": "Project2",
+      "tasks": [
+        {
+          "t_name": "Task3",
+          "start_time": 1737618105084,
+          "end_time": 1737625306424,
+          "totalTime": "2hr 0min 1sec",
+          "description": "aa"
+        }
+      ],
+      "id": 37
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-22-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1737625347430,
+          "end_time": 1737636148700,
+          "totalTime": "3hr 0min 1sec",
+          "description": "QQQ"
+        }
+      ],
+      "id": 38
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-23-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1737634623149,
+          "end_time": 1737656224294,
+          "totalTime": "6hr 0min 1sec",
+          "description": "test RAJ"
+        }
+      ],
+      "id": 39
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-27-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1737634623149,
+          "end_time": 1737656224294,
+          "totalTime": "6hr 0min 1sec",
+          "description": "test timeer"
+        }
+      ],
+      "id": 40
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-27-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task2",
+          "start_time": 1737959302593,
+          "end_time": 1737959306770,
+          "totalTime": 0,
+          "description": "helloooo1234"
+        }
+      ],
+      "id": 41
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-27-2025",
+      "c_name": "Client B",
+      "p_name": "Project2",
+      "tasks": [
+        {
+          "t_name": "Task4",
+          "start_time": 1737959372449,
+          "end_time": 1737959375570,
+          "totalTime": "0hr 0min 3sec",
+          "description": "hellooo321"
+        }
+      ],
+      "id": 42
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-27-2025",
+      "c_name": "Client B",
+      "p_name": "Project2",
+      "tasks": [
+        {
+          "t_name": "Task4",
+          "start_time": 1737959679977,
+          "end_time": 1737959686262,
+          "totalTime": "0hr 0min 6sec",
+          "description": "hellooo"
+        }
+      ],
+      "id": 43
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-27-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1737959844742,
+          "end_time": 1737959855159,
+          "totalTime": "0hr 0min 10sec",
+          "description": "hiwww1`1`1"
+        }
+      ],
+      "id": 44
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-28-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1738038443447,
+          "end_time": 1738039400562,
+          "totalTime": "0hr 15min 57sec",
+          "description": "bug fixxing "
+        }
+      ],
+      "id": 45
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-28-2025",
+      "c_name": "Client B",
+      "p_name": "Project2",
+      "tasks": [
+        {
+          "t_name": "Task3",
+          "start_time": 1738039354208,
+          "end_time": 1738039606813,
+          "totalTime": "0hr 4min 12sec",
+          "description": "UI"
+        }
+      ],
+      "id": 46
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-28-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1738039366204,
+          "end_time": 1738039384658,
+          "totalTime": "0hr 0min 18sec",
+          "description": "removing extra code "
+        }
+      ],
+      "id": 47
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-31-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1738053610650,
+          "end_time": 1738065600784,
+          "totalTime": "3hr 19min 50sec",
+          "description": "bugg"
+        }
+      ],
+      "id": 48
+    },
+    {
+      "u_id": 1736330500827,
+      "date": "01-31-2025",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1738053712551,
+          "end_time": 1738064514712,
+          "totalTime": "3hr 0min 2sec",
+          "description": "hello"
+        }
+      ],
+      "id": 49
+    },
+    {
+      "u_id": 1738318381461,
+      "date": "Select date",
+      "c_name": "Client B",
+      "p_name": "omadeous",
+      "tasks": [
+        {
+          "start_time": 1738318316151,
+          "end_time": 1738318318394,
+          "totalTime": "0hr 0min 2sec",
+          "description": ""
+        }
+      ],
+      "id": 50
+    },
+    {
+      "u_id": 1738318381461,
+      "date": "Select date",
+      "c_name": "Client A",
+      "p_name": "Project1",
+      "tasks": [
+        {
+          "t_name": "Task1",
+          "start_time": 1738318343703,
+          "end_time": 1738318345398,
+          "totalTime": "0hr 0min 1sec",
+          "description": ""
+        }
+      ],
+      "id": 51
+    },
+    {
+      "u_id": 1738318381461,
+      "date": "01-31-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "UI",
+          "start_time": 1738318406279,
+          "end_time": 1738318409384,
+          "totalTime": "0hr 0min 3sec",
+          "description": "Sahil"
+        }
+      ],
+      "id": 52
+    },
+    {
+      "u_id": 1738318381461,
+      "date": "01-31-2025",
+      "c_name": "undefined",
+      "p_name": "undefined",
+      "tasks": [
+        {
+          "start_time": 1738318472341,
+          "end_time": 1738318474023,
+          "totalTime": "0hr 0min 1sec",
+          "description": ""
+        }
+      ],
+      "id": 53
+    },
+    {
+      "u_id": 1738318381461,
+      "date": "01-31-2025",
+      "c_name": "Client B",
+      "p_name": "Project2",
+      "tasks": [
+        {
+          "t_name": "Task3",
+          "start_time": null,
+          "end_time": null,
+          "totalTime": "0hr 0min 0sec"
+        }
+      ],
+      "id": 54
+    },
+    {
+      "u_id": 1738318381461,
+      "date": "01-31-2025",
+      "c_name": "Client A",
+      "p_name": "Project5",
+      "tasks": [
+        {
+          "t_name": "Splitting",
+          "start_time": 1738318529643,
+          "end_time": 1738318633439,
+          "totalTime": "0hr 1min 43sec",
+          "description": "Helloo"
+        }
+      ],
+      "id": 55
+    }
+  ]
+}
