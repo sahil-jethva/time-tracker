@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { SharedModule } from '../../shared/shared.module';
+import { apiURL } from '../../../env';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +25,7 @@ export class RegisterComponent {
   constructor(private httpclient: HttpClient, private messageService: MessageService){}
 
   register() {
-    const url = `http://localhost:3000/register`
+    const url = `${apiURL}/register`
     const requestbody = {
       email: this.email,
       password: this.password,

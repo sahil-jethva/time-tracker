@@ -5,6 +5,7 @@ import { MegaMenuItem } from 'primeng/api';
 import { UserLoginDetail } from '../../modals/modal';
 import { HttpClient } from '@angular/common/http';
 import { SharedModule } from '../../shared/shared.module';
+import { apiURL } from '../../../env';
 @Component({
   selector: 'app-navbar',
   imports: [
@@ -46,7 +47,7 @@ export class NavbarComponent implements OnInit {
     this.userLoggedInDetail()
   }
   userLoggedInDetail() {
-    const url = 'http://localhost:3000/me'
+    const url = `${apiURL}/me`
     this.httpClient.get<{ user: UserLoginDetail }>(url).subscribe(
       (res) => {
         this.details = res.user

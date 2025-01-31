@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { SharedModule } from '../shared/shared.module';
 import { NavbarComponent } from '../common/navbar/navbar.component';
+import { apiURL } from '../../env';
 
 @Component({
   selector: 'app-time-tracker',
@@ -46,7 +47,7 @@ export class TimeTrackerComponent implements OnInit {
     this.isManual = !this.isManual;
   }
   getProjects(row: any) {
-    const url = `http://localhost:3000/projects?c_id=${row.selectedClients.id}`
+    const url = `${apiURL}/projects?c_id=${row.selectedClients.id}`
     this.httpClient.get<Projects[]>(url).subscribe(
       (res) => {
         row.projects = res
@@ -54,7 +55,7 @@ export class TimeTrackerComponent implements OnInit {
     )
   }
   getTasks(row: any) {
-    const url = `http://localhost:3000/tasks?p_id=${row.selectedprojects.id}`
+    const url = `${ apiURL }/tasks?p_id=${row.selectedprojects.id}`
     this.httpClient.get<Tasks[]>(url).subscribe(
       (res) => {
         row.tasks = res
@@ -109,7 +110,7 @@ export class TimeTrackerComponent implements OnInit {
         tasks,
       };
     });
-    const url = `http://localhost:3000/logs`;
+    const url = `${ apiURL }/logs`;
     requestBodies.forEach((requestBody) => {
       this.httpClient.post(url, requestBody).subscribe(
         (res) => {
@@ -379,7 +380,7 @@ export class TimeTrackerComponent implements OnInit {
         tasks,
       };
     });
-    const url = `http://localhost:3000/logs`;
+    const url = `${apiURL}/logs`;
     requestBodies.forEach((requestBody) => {
       this.httpClient.post(url, requestBody).subscribe(
         (res) => {

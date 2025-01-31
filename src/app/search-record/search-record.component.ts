@@ -8,6 +8,7 @@ import { SelectChangeEvent } from 'primeng/select';
 import { Logs, Projects, Tasks } from '../modals/modal';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { apiURL } from '../../env';
 interface Column {
   field: string;
   header: string;
@@ -51,7 +52,7 @@ export class SearchRecordComponent implements OnInit {
 
   getProjects(number: SelectChangeEvent) {
     this.selectedClients = number.value.c_name
-    const url = `http://localhost:3000/projects?c_id=${number.value.id}`
+    const url = `${apiURL}/projects?c_id=${number.value.id}`
     this.httpClient.get<Projects[]>(url).subscribe(
       (res) => {
         this.projects = res
@@ -60,7 +61,7 @@ export class SearchRecordComponent implements OnInit {
   }
   getTasks(number: SelectChangeEvent) {
     this.selectedprojects = number.value.p_name
-    const url = `http://localhost:3000/tasks?p_id=${number.value.id}`
+    const url = `${ apiURL}/tasks?p_id=${number.value.id}`
     this.httpClient.get<Tasks[]>(url).subscribe(
       (res) => {
         this.tasks = res
@@ -73,10 +74,10 @@ export class SearchRecordComponent implements OnInit {
 
     let url: string;
     if (this.selectedClients && this.selectedprojects) {
-      url = `http://localhost:3000/logs/getData?u_id=${this.id}
+      url = `${ apiURL } /logs/getData?u_id=${this.id}
     &client_name=${this.selectedClients}&project_name=${this.selectedprojects}&from_date=${FromDate}&to_date=${ToDate}`;
     } else {
-      url = `http://localhost:3000/logs/getAllLogs?u_id=${this.id}&from_date=${FromDate}&to_date=${ToDate}`;
+      url = `${apiURL}/logs/getAllLogs?u_id=${this.id}&from_date=${FromDate}&to_date=${ToDate}`;
     }
     this.httpClient.get<{ logs: Logs[] }>(url).subscribe(
       (res) => {

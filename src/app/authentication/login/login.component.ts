@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { Login } from '../../modals/modal';
 import { LocalStorageService } from '../../Services/localStorage.service';
 import { SharedModule } from '../../shared/shared.module';
+import { apiURL } from '../../../env';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,7 @@ export class LoginComponent {
   ) { }
 
   login() {
-    const url = `http://localhost:3000/login`
+    const url = `${apiURL}/login`
     const requestbody = {
       email: this.email,
       password: this.password
